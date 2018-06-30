@@ -1,6 +1,6 @@
-import validator, { ErrorMessages } from 'validatorjs';
+import * as validator from 'validatorjs';
 
-export function validate(fieldName: string, value: any, rules: string, context: any = {}, customMessages: ErrorMessages = null): { valid: boolean, message?: string } {
+export function validate(fieldName: string, value: any, rules: string, context: any = {}, customMessages: validator.ErrorMessages = null): { valid: boolean, message?: string } {
   if (!rules) return { valid: true };
 
   fieldName = fieldName || 'value';
@@ -18,6 +18,6 @@ export function useLang(lang: string) {
   validator.useLang(lang);
 }
 
-export function addLang(lang: string, messages: ErrorMessages) {
+export function addLang(lang: string, messages: validator.ErrorMessages) {
   validator.setMessages(lang, messages);
 }

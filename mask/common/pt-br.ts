@@ -1,4 +1,4 @@
-import { IMaskFunction } from '..';
+import { IMask, IMaskFunction } from '..';
 
 const cpf: IMaskFunction = {
   apply: (value: string) => {
@@ -32,7 +32,7 @@ const cnpj: IMaskFunction = {
   clean: (value: string) => value.replace(/\D/gi, '').substr(0, 14)
 }
 
-export default [{
+const masks: IMask[] = [{
   name: 'zipcode',
   apply: (value: string) => value.replace(/^(\d{0,5})(\d{0,3}).*/, '$1-$2').replace(/-$/, ''),
   clean: (value: string) => value.replace(/\D/gi, '').substr(0, 8)
@@ -68,3 +68,5 @@ export default [{
   name: 'cnpj',
   ...cnpj
 }];
+
+export default masks;

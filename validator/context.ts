@@ -1,10 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 
-import FieldBase from '../components/Base';
+import FieldCoreBase from '../components/FieldCoreBase';
 
 export interface IFieldValidationContext {
-  bind: (field: FieldBase<any, any>) => void;
-  unbind: (field: FieldBase<any, any>) => void;
+  register: (field: FieldCoreBase) => void;
+  unregister: (field: FieldCoreBase) => void;
 }
 
 export const FieldValidation = React.createContext<IFieldValidationContext>(null);

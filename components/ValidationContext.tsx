@@ -1,15 +1,15 @@
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 
 import { FieldValidation, IFieldValidationContext } from '../validator/context';
-import FieldBase from './Base';
+import FieldCoreBase from './FieldCoreBase';
 
-export default class ValidationContext extends PureComponent<{}> {
-  public fields: FieldBase<any, any>[] = [];
+export default class ValidationContext extends React.PureComponent<{}> {
+  public fields: FieldCoreBase<any, any>[] = [];
   private registerFields: IFieldValidationContext = {
-    bind: field => {
+    register: field => {
       this.fields.push(field);
     },
-    unbind: field => {
+    unregister: field => {
       const index = this.fields.findIndex(f => f === field);
       this.fields.splice(index, 1);
     }

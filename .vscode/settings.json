@@ -20,6 +20,6 @@
     "*.d.ts": true,
     "**/*.map": {
       "when": "$(basename)"
-    },
+    }
   }
 }

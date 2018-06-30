@@ -1,14 +1,11 @@
-React Form Fields: Material UI
+React Form Fields: Core
 ------------------------------
-
-See [Demo](https://react-form-fields.github.io/material-ui)
 
 See [API.md](https://github.com/react-form-fields/core/blob/master/API.md) for details
 
 ## Requirements 
 
-* React >= 16.0.0
-* Material-ui >= 1.0.0
+* React >= 16.3.0
 
 ## Install
 
@@ -22,7 +19,7 @@ yarn add @react-form-fields/core
 
 ```jsx
   // import
-  import FieldText from '@react-form-fields/core/components/Text';
+  import FieldText from '@react-form-fields/material-ui/components/Text';
 
   // render()
   <FieldText
@@ -46,7 +43,7 @@ yarn add @react-form-fields/core
 ```jsx
   // import
   import ValidationContext from '@react-form-fields/core/components/ValidationContext';
-  import FieldText from '@react-form-fields/core/components/Text';
+  import FieldText from '@react-form-fields/material-ui/components/Text';
 
   // render()
   <ValidationContext ref={ref=> this.validation = ref}>
@@ -79,13 +76,12 @@ yarn add @react-form-fields/core
 Global Setup example:
 
 ```js
-import { setConfig } from '@react-form-fields/core/config';
+import { setConfig } from '@react-form-fields/core';
 import commonMasks from '@react-form-fields/core/mask/common/pt-br';
 import validationMessage from '@react-form-fields/core/validator/custom-languages/pt-br';
 
 setConfig({
   masks: commonMasks,
-  defaultDateLocale: 'pt-br',
   validation: validationMessage
 });
 ```
@@ -94,11 +90,10 @@ setConfig({
 
 See [validatorjs](https://github.com/skaterdav85/validatorjs)
 
-Validation Context
+Validation and Validation Context
 
 ```jsx
 <FieldDate
-  label='Begin Date'
   name='begin'
   value={model.beginDate}
   validation='date'
@@ -106,7 +101,6 @@ Validation Context
 />
 
 <FieldDate
-  label='End Date'
   name='end'
   value={model.endDate}
   validation='date|after_or_equal:begin date' //after_or_equal needs a value from other prop (ex: 'begin date')
@@ -131,7 +125,7 @@ Custom Message
 
 ## Mask
 
-Only FieldText has mask prop;
+Register your custom masks:
 
 ```js
   // register

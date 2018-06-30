@@ -11,7 +11,6 @@ export interface IConfig {
     lang: string;
     customMessages?: ErrorMessages;
   }
-  defaultDateLocale?: string;
 }
 
 export function getConfig(): IConfig {

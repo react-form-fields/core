@@ -1,7 +1,7 @@
-import { TextFieldProps } from '@material-ui/core/TextField';
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import { ErrorMessages } from 'validatorjs';
 
+import { getMask, IMaskFunction } from '../mask';
 import { validate } from '../validator';
 import { FieldValidation, IFieldValidationContext } from '../validator/context';
 import CustomMessage from './CustomMessage';
@@ -12,20 +12,21 @@ export interface IStateFieldBase {
   submitted: boolean;
 }
 
-export interface IPropsFieldBase extends TextFieldProps {
-  disabled?: boolean;
+export interface IPropsFieldBase {
+  name?: string;
   value?: any;
-  classes?: any;
   validation?: string;
   validationContext?: Object;
   errorMessage?: string;
-  onChange?: (value: any) => void;
+  submitted?: boolean;
+  mask?: string;
+  children?: React.ReactChildren;
 }
 
-export default abstract class FieldBase<
+export default class FieldCoreBase<
   P extends IPropsFieldBase = IPropsFieldBase,
   S extends IStateFieldBase = IStateFieldBase
-  > extends PureComponent<P, S> {
+  > extends React.PureComponent<P, S> {
 
   protected validationContext: IFieldValidationContext;
 
@@ -46,12 +47,23 @@ export default abstract class FieldBase<
     return (this.props.validation || '').includes('required');
   }
 
-  static getDerivedStateFromProps({ name, value, validation, validationContext, children }: IPropsFieldBase, currentState: IStateFieldBase): IStateFieldBase {
+  get mask(): IMaskFunction {
+    let mask = getMask(this.props.mask);
+
+    if (!mask) {
+      mask = { apply: v => v, clean: v => v };
+      this.props.mask && console.warn(`@react-form-fields/core: Mask '${this.props.mask}' not found`)
+    }
+
+    return mask;
+  }
+
+  static getDerivedStateFromProps({ name, value, validation, validationContext, children, submitted }: IPropsFieldBase, currentState: IStateFieldBase): IStateFieldBase {
     const customMessages = React.Children
       .toArray(children)
       .reduce<ErrorMessages>((acc, child: any) => {
         if (child.type === CustomMessage) {
-          child.props.rules.split(',').forEach((rule: string ) => {
+          child.props.rules.split(',').forEach((rule: string) => {
             acc[rule] = child.props.children;
           });
         }
@@ -63,12 +75,13 @@ export default abstract class FieldBase<
 
     return {
       ...currentState,
+      submitted: submitted !== undefined ? submitted : currentState.submitted,
       errorMessage: error.message
     };
   }
 
   public componentWillUnmount() {
-    this.validationContext && this.validationContext.unbind(this);
+    this.validationContext && this.validationContext.unregister(this);
   }
 
   public setFormSubmitted = (submitted: boolean) => {
@@ -82,11 +95,11 @@ export default abstract class FieldBase<
   public setContext = (newContext: IFieldValidationContext): React.ReactNode => {
     if (newContext === this.validationContext) return null;
 
-    this.validationContext && this.validationContext.unbind(this);
+    this.validationContext && this.validationContext.unregister(this);
 
     if (newContext) {
       this.validationContext = newContext;
-      this.validationContext.bind(this);
+      this.validationContext.register(this);
     }
 
     return null;
@@ -95,7 +108,7 @@ export default abstract class FieldBase<
   public render() {
     return (
       <FieldValidation.Consumer>
-        {context => this.setContext(context)}
+        {this.setContext}
       </FieldValidation.Consumer>
     );
   }

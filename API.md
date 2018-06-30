@@ -1,126 +1,51 @@
 API
 ---
 
-* [Base](#base)
-* [Text](#text)
-* [Checkbox / Switch](#checkbox-/-switch)
-* [Radio](#radio)
-* [Date](#date)
-* Time (comming soon)
-* [Select](#select)
-* [Switch](#switch)
-* [Color](#color)
-* [Autocomplete](#autocomplete)
-* [Html](#html)
-* [Hidden](#hidden)
-* [Custom Message](#custom-message)
-
 ### Base (Common props)
 
-| Props             | Required | Type                   | Description                                        |
-|-------------------|----------|------------------------|----------------------------------------------------|
-| label             | false    | string                 |                                                    |
-| helperText        | false    | string                 |                                                    |
-| disabled          | false    | boolean                |                                                    |
-| validation        | false    | string                 | rules of validation                                |
-| validationContext | false    | object { prop: value } | extra fields for validation bind (ex. required_if) |
-| errorMessage      | false    | string                 | custom error message from external validation      |
+Component Base to create a form field.
 
-#### Text
+| Props             | Required | Type                   | Description                                                            |
+|-------------------|----------|------------------------|------------------------------------------------------------------------|
+| name              | false    | string                 |                                                                        |
+| value             | false    | any                    |                                                                        |
+| submitted         | false    | boolean                | flag to set if form was submited (also can be set by setFormSubmitted) |
+| validation        | false    | string                 | rules of validation                                                    |
+| validationContext | false    | object { prop: value } | extra fields for validation bind (ex. required_if)                     |
+| errorMessage      | false    | string                 | custom error message from external validation                          |
 
-All [material-ui](https://material-ui.com/api/text-field/) props and:
+### How to Create a Form Field
 
-| Props    | Required | Type                    | Description                          |
-|----------|----------|-------------------------|--------------------------------------|
-| value    | true     | any                     |                                      |
-| mask     | false    | string                  |                                      |
-| onChange | true     | Function(string/number) |                                      |
-| loading  | false    | boolean                 | if true will add a progress at right |
+```jsx
+import { FieldCoreBase } from '@react-form-fields/core';
 
-#### Checkbox / Switch
+class MyComponentField extends FieldCoreBase {
+  onChange = event => {
+    const value = this.mask.clean(event.target ? event.target.value : event);
 
-All material-ui 
-[checkbox](https://material-ui.com/api/checkbox/) and
-[switch](https://material-ui.com/api/switch/) 
- props and:
+    this.setState({ touched: true }); //<-- important to show the error
+    this.props.onChange(value);
+  }
 
-| Props      | Required | Type                                     | Description                   |
-|------------|----------|------------------------------------------|-------------------------------|
-| value      | false    | any                                      | if null will return a boolean |
-| checked    | true     | boolean                                  |                               |
-| helperText | false    | string                                   |                               |
-| onChange   | true     | Function(value (if provided) or boolean) |                               |
+  render() {
+    const { value, label, name } = this.props;
 
-### Radio 
+    return (
+      <Fragment>
+        {super.render() /*<-- important*/} 
 
-All material-ui [radio](https://material-ui.com/api/radio/) props and:
+        {/* isRequired: check if validation prop contains the required rule */}
+        <label>{label} {this.isRequired ? '*' : ''}</label>
+        <input 
+          name={name}
+          value={this.mask.apply(value)}
+          onChange={this.onChange}
+        />
 
-| Props      | Required | Type            | Description                        |
-|------------|----------|-----------------|------------------------------------|
-| value      | true     | any             | Value that will return if selected |
-| checked    | true     | boolean         |                                    |
-| helperText | false    | string          |                                    |
-| onChange   | true     | Function(value) |                                    |
-
-
-### Date
-
-All [material-ui-pickers](https://github.com/dmtrKovalenko/material-ui-pickers) props and:
-
-| Props         | Required | Type           | Description                      |
-|---------------|----------|----------------|----------------------------------|
-| value         | true     | Date           |                                  |
-| minDate       | false    | Date           |                                  |
-| maxDate       | false    | Date           |                                  |
-| disablePast   | false    | boolean        |                                  |
-| disableFuture | false    | boolean        |                                  |
-| format        | false    | string         | moment string format             |
-| locale        | false    | string         | use defaultDateLocale as default |
-| onChange      | true     | Function(date) |                                  |
-
-#### Select
-
-All [material-ui](https://material-ui.com/api/select/) props and:
-
-| Props    | Required | Type                                           | Description                          |
-|----------|----------|------------------------------------------------|--------------------------------------|
-| value    | true     | any                                            |                                      |
-| options  | true     | object { value: string/number, label: string } |                                      |
-| onChange | true     | Function(string/number)                        |                                      |
-| loading  | false    | boolean                                        | if true will add a progress at right |
-
-#### Color
-
-| Props    | Required | Type             | Description |
-|----------|----------|------------------|-------------|
-| value    | true     | string           |             |
-| onChange | true     | Function(string) |             |
-
-
-#### Autocomplete
-
-| Props    | Required | Type                                           | Description |
-|----------|----------|------------------------------------------------|-------------|
-| value    | true     | any                                            |             |
-| options  | true     | object { value: string/number, label: string } |             |
-| onChange | true     | Function(string/number)                        |             |
-
-#### Html
-
-| Props    | Required | Type             | Description |
-|----------|----------|------------------|-------------|
-| value    | true     | string           |             |
-| onChange | true     | Function(string) |             |
-
-#### Hidden
-
-| Props | Required | Type | Description |
-|-------|----------|------|-------------|
-| value | true     | any  |             |
-
-#### Custom Message
-
-| Props    | Required | Type   | Description        |
-|----------|----------|--------|--------------------|
-| rules    | true     | string | separated by comma |
-| children | true     | string | message            |
+        {/* errorMessage will null if submitted and touched are false  */}
+        {this.errorMessage ? <p class="error">{this.errorMessage}</p> : null}
+      </Fragment>
+    );
+  }
+}
+```
