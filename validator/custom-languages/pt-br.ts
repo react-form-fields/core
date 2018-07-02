@@ -1,4 +1,3 @@
-import 'moment/locale/pt-br';
 import 'validatorjs/dist/lang/pt';
 
 import { IConfig } from '../../config';

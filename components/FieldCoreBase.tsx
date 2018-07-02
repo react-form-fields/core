@@ -20,7 +20,7 @@ export interface IPropsFieldBase {
   errorMessage?: string;
   submitted?: boolean;
   mask?: string;
-  children?: React.ReactChildren;
+  children?: React.ReactNode;
 }
 
 export default class FieldCoreBase<
