@@ -88,6 +88,10 @@ export default class FieldCoreBase<
     this.setState({ submitted });
   }
 
+  public resetState = () => {
+    this.setState({ submitted: false, touched: false });
+  }
+
   public isValid = () => {
     return !this.state.errorMessage && !this.props.errorMessage;
   }

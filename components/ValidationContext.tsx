@@ -21,7 +21,7 @@ export default class ValidationContext extends React.PureComponent<{}> {
   }
 
   public reset = (): void => {
-    this.fields.forEach(f => f.setFormSubmitted(false));
+    this.fields.forEach(f => f.resetState());
   }
 
   private checkValidation = (): boolean => {
