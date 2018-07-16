@@ -9,7 +9,7 @@
     "validation",
     "material"
   ],
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
@@ -31,18 +31,18 @@
     "prepare": "yarn tsc"
   },
   "dependencies": {
-    "react": "^16.3.0",
-    "tslib": "^1.9.2",
-    "validatorjs": "^3.0.0"
+    "react": ">=16.3.0",
+    "tslib": ">=1.9.0",
+    "validatorjs": ">=3.0.0"
   },
   "peerDependencies": {
-    "react": "^16.3.0"
+    "react": ">=16.3.0"
   },
   "devDependencies": {
-    "@types/node": "^10.3.0",
-    "@types/react": "^16.4.6",
-    "@types/validatorjs": "^3.7.1",
-    "husky": "^0.14.3",
-    "typescript": "^2.9.2"
+    "@types/node": "10.3.0",
+    "@types/react": "16.4.6",
+    "@types/validatorjs": "3.7.1",
+    "husky": "0.14.3",
+    "typescript": "2.9.2"
   }
 }
