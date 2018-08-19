@@ -7,7 +7,7 @@ import { FieldValidation, IFieldValidationContext } from '../validator/context';
 import CustomMessage from './CustomMessage';
 
 export interface IStateFieldBase {
-  touched: boolean;
+  showError: boolean;
   errorMessage: string;
   submitted: boolean;
 }
@@ -32,14 +32,14 @@ export default class FieldCoreBase<
 
   constructor(props: any) {
     super(props);
-    this.state = { touched: false, error: null } as any;
+    this.state = { showError: false, errorMessage: null } as S;
   }
 
   get errorMessage() {
     const { errorMessage: errorProp } = this.props;
-    const { submitted, touched, errorMessage } = this.state;
+    const { submitted, showError, errorMessage } = this.state;
 
-    return submitted || touched ?
+    return submitted || showError ?
       errorProp || errorMessage : null;
   }
 
@@ -89,7 +89,7 @@ export default class FieldCoreBase<
   }
 
   public resetState = () => {
-    this.setState({ submitted: false, touched: false });
+    this.setState({ submitted: false, showError: false });
   }
 
   public isValid = () => {
