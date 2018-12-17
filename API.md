@@ -28,21 +28,22 @@ class MyComponentField extends FieldCoreBase {
   }
 
   render() {
-    const { value, label, name } = this.props;
+    const { label, name } = this.props;
 
     return (
       <Fragment>
-        {super.render() /*<-- important*/} 
+        {/* import: register the field in the validation context */}
+        <ValidationContextRegister field={this} />
 
         {/* isRequired: check if validation prop contains the required rule */}
         <label>{label} {this.isRequired ? '*' : ''}</label>
         <input 
           name={name}
-          value={this.mask.apply(value)}
+          value={this.getMaskedValue}
           onChange={this.onChange}
         />
 
-        {/* errorMessage will null if submitted and touched are false  */}
+        {/* errorMessage will be null if submitted and touched are false  */}
         {this.errorMessage ? <p class="error">{this.errorMessage}</p> : null}
       </Fragment>
     );

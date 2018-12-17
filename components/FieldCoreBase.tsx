@@ -23,12 +23,12 @@ export interface IPropsFieldBase {
   children?: React.ReactNode;
 }
 
-export default class FieldCoreBase<
+export default abstract class FieldCoreBase<
   P extends IPropsFieldBase = IPropsFieldBase,
   S extends IStateFieldBase = IStateFieldBase
   > extends React.PureComponent<P, S> {
-
-  protected validationContext: IFieldValidationContext;
+  static contextType = FieldValidation;
+  context: IFieldValidationContext;
 
   constructor(props: any) {
     super(props);
@@ -58,6 +58,10 @@ export default class FieldCoreBase<
     return mask;
   }
 
+  get getMaskedValue() {
+    return this.mask.apply(this.props.value);
+  }
+
   static getDerivedStateFromProps({ name, value, validation, validationContext, children, submitted }: IPropsFieldBase, currentState: IStateFieldBase): IStateFieldBase {
     const customMessages = React.Children
       .toArray(children)
@@ -81,7 +85,7 @@ export default class FieldCoreBase<
   }
 
   public componentWillUnmount() {
-    this.validationContext && this.validationContext.unregister(this);
+    this.context && this.context.unregister(this);
   }
 
   public setFormSubmitted = (submitted: boolean) => {
@@ -94,26 +98,5 @@ export default class FieldCoreBase<
 
   public isValid = () => {
     return !this.state.errorMessage && !this.props.errorMessage;
-  }
-
-  public setContext = (newContext: IFieldValidationContext): React.ReactNode => {
-    if (newContext === this.validationContext) return null;
-
-    this.validationContext && this.validationContext.unregister(this);
-
-    if (newContext) {
-      this.validationContext = newContext;
-      this.validationContext.register(this);
-    }
-
-    return null;
-  }
-
-  public render() {
-    return (
-      <FieldValidation.Consumer>
-        {this.setContext}
-      </FieldValidation.Consumer>
-    );
   }
 }
