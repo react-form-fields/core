@@ -7,8 +7,8 @@ interface IMaskContainer {
 }
 
 export interface IMaskFunction {
-  apply(value: string): string;
-  clean(value: string): string;
+  apply(value: string | number): string;
+  clean(value: string): string | number;
 }
 
 const container: IMaskContainer = {};
