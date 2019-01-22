@@ -32,6 +32,6 @@ export default class ValidationContextRegister extends React.PureComponent<IProp
       <FieldValidation.Consumer>
         {this.setContext}
       </FieldValidation.Consumer>
-    )
+    );
   }
 }

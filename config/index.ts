@@ -1,16 +1,16 @@
 import { ErrorMessages } from 'validatorjs';
 
-import { IMask, register as registerMasks } from './mask';
-import * as validator from './validator';
+import { IMask, register as registerMasks } from '../mask';
+import * as validator from '../validator';
 
 let config: IConfig = {};
 
 export interface IConfig {
-  masks?: IMask[],
+  masks?: IMask[];
   validation?: {
     lang: string;
     customMessages?: ErrorMessages;
-  }
+  };
 }
 
 export function getConfig(): IConfig {

@@ -52,7 +52,7 @@ export default abstract class FieldCoreBase<
 
     if (!mask) {
       mask = { apply: (v: string) => v, clean: v => v };
-      this.props.mask && console.warn(`@react-form-fields/core: Mask '${this.props.mask}' not found`)
+      this.props.mask && console.warn(`@react-form-fields/core: Mask '${this.props.mask}' not found`);
     }
 
     return mask;

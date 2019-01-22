@@ -37,6 +37,6 @@ export default class ValidationContext extends React.PureComponent<{}> {
       <FieldValidation.Provider value={this.registerFields}>
         {this.props.children}
       </FieldValidation.Provider>
-    )
+    );
   }
 }

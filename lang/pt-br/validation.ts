@@ -2,7 +2,7 @@ import 'validatorjs/dist/lang/pt';
 
 import { IConfig } from '../../config';
 
-const language: IConfig['validation'] = {
+const validation: IConfig['validation'] = {
   lang: 'custom-pt-br',
   customMessages: {
     same: 'Não coincide.',
@@ -45,4 +45,4 @@ const language: IConfig['validation'] = {
   }
 };
 
-export default language;
+export default validation;
