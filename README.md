@@ -1,3 +1,4 @@
+![logo](https://avatars2.githubusercontent.com/u/40718737?s=50&v=4)  
 React Form Fields: Core
 ------------------------------
 
@@ -13,153 +14,61 @@ See [API.md](https://github.com/react-form-fields/core/blob/master/API.md) for d
 yarn add @react-form-fields/core
 ```
 
-## Usage
+## Implementations
 
-### Individual field
+* [Material UI](https://github.com/react-form-fields/material-ui)
+* [NativeBase](https://github.com/react-form-fields/native-base)
 
-```jsx
-  // import
-  import FieldText from '@react-form-fields/material-ui/components/Text';
+### How to Create a Form Field
 
-  // render()
-  <FieldText
-    ref={ref => this.field = ref}
-    label='Email'
-    type='email'
-    disabled={disabled}
-    value={email}
-    validation='required|email'
-    onChange={v => this.setState({ email: v }))}
-  />
+```tsx
+import FieldCoreBase, { IPropsFieldBase, IStateFieldBase } from '@react-form-fields/core/components/FieldCoreBase';
 
-  // onSubmit()
-  if(this.field.isValid()) { 
-    console.log('submit');
+interface IState extends IStateFieldBase {
+  //your state props
+}
+
+interface IProps extends IPropsFieldBase {
+  // your props
+}
+
+class MyComponentField extends FieldCoreBase<IProps, IState> {
+  //If you need getDerivedStateFromProps dont forget to call super 
+  static getDerivedStateFromProps(props: IProps, currentState: IState): IState {
+    const state = super.getDerivedStateFromProps(props, currentState);
+    // your logic....
+    return state;
   }
-```
 
-### Complete Form
+  onChange = event => {
+    const value = this.mask.clean(event.target ? event.target.value : event);
 
-```jsx
-  // import
-  import ValidationContext from '@react-form-fields/core/components/ValidationContext';
-  import FieldText from '@react-form-fields/material-ui/components/Text';
-
-  // render()
-  <ValidationContext ref={ref=> this.validation = ref}>
-    <FieldText
-      ref={ref => this.field = ref}
-      label='Email'
-      type='email'
-      value={email}
-      validation='required|email'
-      onChange={v => this.setState({ email: v }))}
-    />
-
-    <FieldText
-      label='Senha'
-      type='password'
-      value={password}
-      validation='required'
-      onChange={v => this.setState({ password: v }))}
-    />
-  </ValidationContext>
-
-  // onSubmit()
-  if(this.validation.isValid()) { 
-    console.log('all fields are valid');
+    this.setState({ touched: true }); //<-- important to show the error
+    this.props.onChange(value);
   }
-```
 
-### Config
+  render() {
+    const { label, name } = this.props;
 
-Global Setup example:
+    return (
+      <Fragment>
+        {/* import: register the field in the validation context */}
+        <ValidationContextRegister field={this} />
 
-```js
-import { setConfig } from '@react-form-fields/core';
-import commonMasks from '@react-form-fields/core/mask/common/pt-br';
-import validationMessage from '@react-form-fields/core/validator/custom-languages/pt-br';
+        {/* isRequired: check if validation prop contains the required rule */}
+        <label>{label} {this.isRequired ? '*' : ''}</label>
+        <input 
+          name={name}
+          value={this.getMaskedValue}
+          onChange={this.onChange}
+        />
 
-setConfig({
-  masks: commonMasks,
-  validation: validationMessage
-});
-```
-
-## Validation Rules and Config
-
-See [validatorjs](https://github.com/skaterdav85/validatorjs)
-
-Validation and Validation Context
-
-```jsx
-<FieldDate
-  name='begin'
-  value={model.beginDate}
-  validation='date'
-  onChange={(v => this.setState({ model: { ...model, beginDate: v } }))}
-/>
-
-<FieldDate
-  name='end'
-  value={model.endDate}
-  validation='date|after_or_equal:begin date' //after_or_equal needs a value from other prop (ex: 'begin date')
-  validationContext={{ 'begin date': model.beginDate }} // build the dependency object as you needed
-  onChange={(v => this.setState({ model: { ...model, endDate: v } }))}
-/>
-```
-
-Custom Message
-
-```jsx
-<FieldDate
-  label='Begin Date'
-  name='begin'
-  value={model.beginDate}
-  validation='date'
-  onChange={(v => this.setState({ model: { ...model, beginDate: v } }))}
->
-  <CustomMessage rules='date'>This not a date!</CustomMessage>
-</FieldDate>
-```
-
-## Mask
-
-Register your custom masks:
-
-```js
-  // register
-  import { register } from '@react-form-fields/core/mask';
-   
-  // -optional
-  import commonMasks from '@react-form-fields/core/mask/common/pt-br';
-
-  register([
-    ...commonMasks, // -optional
-    name: 'my-new-mask',
-    apply: value => {
-      if (!value) return value;
-
-      const regexp = value.length > 10 ?
-        /^(\d{0,2})(\d{0,5})(\d{0,4}).*/ :
-        /^(\d{0,2})(\d{0,4})(\d{0,4}).*/;
-
-      const result = value.length > 2 ?
-        '($1) $2-$3' : '($1$2$3';
-
-      return value.replace(regexp, result).replace(/-$/, '');
-    },
-    clean: value => value.replace(/\D/gi, '').substr(0, 11)
-  ])
-
-  // usage
-  <FieldText
-    label='Phone'
-    type='text'
-    mask='my-new-mask'
-    value={phone}
-    onChange={v => this.setState({ phone: v }))}
-  />
+        {/* errorMessage will be null if submitted and touched are false  */}
+        {this.errorMessage ? <p class="error">{this.errorMessage}</p> : null}
+      </Fragment>
+    );
+  }
+}
 ```
 
 ### Common Masks

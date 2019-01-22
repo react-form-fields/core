@@ -16,10 +16,25 @@ Component Base to create a form field.
 
 ### How to Create a Form Field
 
-```jsx
-import { FieldCoreBase } from '@react-form-fields/core';
+```tsx
+import FieldCoreBase, { IPropsFieldBase, IStateFieldBase } from '@react-form-fields/core/components/FieldCoreBase';
 
-class MyComponentField extends FieldCoreBase {
+interface IState extends IStateFieldBase {
+  //your state props
+}
+
+interface IProps extends IPropsFieldBase {
+  // your props
+}
+
+class MyComponentField extends FieldCoreBase<IProps, IState> {
+  //If you need getDerivedStateFromProps dont forget to call super 
+  static getDerivedStateFromProps(props: IProps, currentState: IState): IState {
+    const state = super.getDerivedStateFromProps(props, currentState);
+    // your logic....
+    return state;
+  }
+
   onChange = event => {
     const value = this.mask.clean(event.target ? event.target.value : event);
 
