@@ -25,6 +25,11 @@ export default class ConfigBuilder {
     return this;
   }
 
+  public fromLang(lang: IConfig) {
+    this.config = { ...lang };
+    return this;
+  }
+
   public build() {
     return this.config;
   }
