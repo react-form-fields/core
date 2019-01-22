@@ -1,5 +1,4 @@
-API
----
+# How To Use
 
 ### Base (Common props)
 
@@ -25,6 +24,7 @@ interface IState extends IStateFieldBase {
 
 interface IProps extends IPropsFieldBase {
   // your props
+  onChange: (value: string) => void;
 }
 
 class MyComponentField extends FieldCoreBase<IProps, IState> {
@@ -62,6 +62,49 @@ class MyComponentField extends FieldCoreBase<IProps, IState> {
         {this.errorMessage ? <p class="error">{this.errorMessage}</p> : null}
       </Fragment>
     );
+  }
+}
+```
+
+### How extends default config
+
+```ts
+// your config/index.ts
+import * as coreConfig from '@react-form-fields/core/config';
+
+declare module '@react-form-fields/core/config' {
+  interface IConfig {
+    newProps?: string;
+  }
+}
+
+const defaultConfig: coreConfig.IConfig = {
+  newProps: 'teste'
+};
+
+export function getConfig(): coreConfig.IConfig {
+  return {
+    ...defaultConfig,
+    ...(coreConfig.getConfig() || {})
+  };
+}
+
+export function setConfig(config: coreConfig.IConfig) {
+  coreConfig.setConfig(config);
+}
+
+// your config/builder.ts
+import { IConfig } from '@react-form-fields/core/config';
+import CoreConfigBuilder from '@react-form-fields/core/config/builder';
+
+export default class ConfigBuilder extends CoreConfigBuilder {
+  public setNewProps(newProps: string) {
+    this.config = {
+      ...this.config,
+      newProps: newProps
+    };
+
+    return this; // <-- always return this
   }
 }
 ```
