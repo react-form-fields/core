@@ -3,7 +3,6 @@ import { ErrorMessages } from 'validatorjs';
 
 import { getMask, IMaskFunction } from '../mask';
 import { validate } from '../validator';
-import { FieldValidation, IFieldValidationContext } from '../validator/context';
 import CustomMessage from './CustomMessage';
 
 export interface IStateFieldBase {
@@ -27,9 +26,6 @@ export default abstract class FieldCoreBase<
   P extends IPropsFieldBase = IPropsFieldBase,
   S extends IStateFieldBase = IStateFieldBase
   > extends React.PureComponent<P, S> {
-  static contextType = FieldValidation;
-  context: IFieldValidationContext;
-
   constructor(props: any) {
     super(props);
     this.state = { showError: false, errorMessage: null } as S;
@@ -82,10 +78,6 @@ export default abstract class FieldCoreBase<
       submitted: submitted !== undefined ? submitted : currentState.submitted,
       errorMessage: error.message
     };
-  }
-
-  public componentWillUnmount() {
-    this.context && this.context.unregister(this);
   }
 
   public setFormSubmitted = (submitted: boolean) => {

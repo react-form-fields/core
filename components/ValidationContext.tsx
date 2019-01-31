@@ -6,6 +6,9 @@ import FieldCoreBase from './FieldCoreBase';
 export default class ValidationContext extends React.PureComponent<{}> {
   public fields: FieldCoreBase<any, any>[] = [];
   private registerFields: IFieldValidationContext = {
+    getFields: () => {
+      return this.fields;
+    },
     register: field => {
       this.fields.push(field);
     },
