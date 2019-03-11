@@ -29,5 +29,8 @@ See [HOW_TO_USE.md](https://github.com/react-form-fields/core/blob/master/HOW_TO
 * zipcode
 * phone
 * document (CNPJ/CPF)
+* cnpj
+* cpf
 * cpf
 * cnpj
+* money

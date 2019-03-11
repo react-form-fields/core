@@ -16,6 +16,7 @@ export interface IPropsFieldBase {
   value?: any;
   validation?: string;
   validationContext?: Object;
+  validationAttributeNames?: Object;
   errorMessage?: string;
   submitted?: boolean;
   mask?: string;
@@ -58,7 +59,7 @@ export default abstract class FieldCoreBase<
     return this.mask.apply(this.props.value);
   }
 
-  static getDerivedStateFromProps({ name, value, validation, validationContext, children, submitted }: IPropsFieldBase, currentState: IStateFieldBase): IStateFieldBase {
+  static getDerivedStateFromProps({ name, value, validation, validationContext, validationAttributeNames, children, submitted }: IPropsFieldBase, currentState: IStateFieldBase): IStateFieldBase {
     const customMessages = React.Children
       .toArray(children)
       .reduce<ErrorMessages>((acc, child: any) => {
@@ -71,7 +72,7 @@ export default abstract class FieldCoreBase<
         return acc;
       }, {});
 
-    const error = validate(name, value, validation, validationContext, customMessages);
+    const error = validate(name, value, validation, validationContext, validationAttributeNames, customMessages);
 
     return {
       ...currentState,

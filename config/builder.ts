@@ -1,4 +1,5 @@
-import { ErrorMessages } from 'validatorjs';
+import { AttributeFormatter, ErrorMessages, RegisterAsyncCallback, RegisterCallback } from 'validatorjs';
+import Validator = require('validatorjs');
 
 import { IConfig } from '.';
 import { IMask } from '../mask';
@@ -17,6 +18,21 @@ export default class ConfigBuilder {
 
   public addMasks(masks: IMask[]) {
     this.config.masks = [...this.config.masks, ...masks];
+    return this;
+  }
+
+  public addValidator(name: string, callback: RegisterCallback, errorMessage: string) {
+    Validator.register(name, callback, errorMessage);
+    return this;
+  }
+
+  public addValidatorAsync(name: string, callback: RegisterAsyncCallback, errorMessage: string) {
+    Validator.registerAsync(name, callback, errorMessage);
+    return this;
+  }
+
+  public setValidatorAttributeFormatter(func: AttributeFormatter) {
+    Validator.setAttributeFormatter(func);
     return this;
   }
 

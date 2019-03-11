@@ -4,31 +4,32 @@
 
 Component Base to create a form field.
 
-| Props             | Required | Type                   | Description                                                            |
-|-------------------|----------|------------------------|------------------------------------------------------------------------|
-| name              | false    | string                 |                                                                        |
-| value             | false    | any                    |                                                                        |
-| submitted         | false    | boolean                | flag to set if form was submited (also can be set by setFormSubmitted) |
-| validation        | false    | string                 | rules of validation                                                    |
-| validationContext | false    | object { prop: value } | extra fields for validation bind (ex. required_if)                     |
-| errorMessage      | false    | string                 | custom error message from external validation                          |
+| Props                    | Required | Type                   | Description                                                            |
+|--------------------------|----------|------------------------|------------------------------------------------------------------------|
+| name                     | false    | string                 |                                                                        |
+| value                    | false    | any                    |                                                                        |
+| submitted                | false    | boolean                | flag to set if form was submited (also can be set by setFormSubmitted) |
+| validation               | false    | string                 | rules of validation                                                    |
+| validationContext        | false    | object { prop: value } | extra fields for validation bind (ex. required_if)                     |
+| validationAttributeNames | false    | object { prop: value } | see: https://github.com/skaterdav85/validatorjs#custom-attribute-names |
+| errorMessage             | false    | string                 | custom error message from external validation                          |
 
 ### How to Create a Form Field
 
 ```tsx
 import FieldCoreBase, { IPropsFieldBase, IStateFieldBase } from '@react-form-fields/core/components/FieldCoreBase';
 
-interface IState extends IStateFieldBase {
+interface IState extends IStateFieldBase { //<-- extends
   //your state props
 }
 
-interface IProps extends IPropsFieldBase {
+interface IProps extends IPropsFieldBase { //<-- extends
   // your props
   onChange: (value: string) => void;
 }
 
 class MyComponentField extends FieldCoreBase<IProps, IState> {
-  //If you need getDerivedStateFromProps dont forget to call super 
+  //[optional] If you need getDerivedStateFromProps dont forget to call super 
   static getDerivedStateFromProps(props: IProps, currentState: IState): IState {
     const state = super.getDerivedStateFromProps(props, currentState);
     // your logic....
