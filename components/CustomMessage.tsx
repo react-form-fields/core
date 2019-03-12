@@ -6,5 +6,7 @@ interface IProps {
 }
 
 export default class CustomMessage extends PureComponent<IProps> {
-
+  render(): React.ReactNode {
+    return null;
+  }
 }
