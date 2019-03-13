@@ -23,7 +23,7 @@ export default class ValidationContextRegister extends React.PureComponent<IProp
     return null;
   }
 
-  public componentWillMount() {
+  public componentWillUnmount() {
     this.validationContext && this.validationContext.unregister(this.props.field);
   }
 
