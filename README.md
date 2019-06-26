@@ -5,7 +5,7 @@ React Form Fields: Core
 
 ## Requirements 
 
-* React >= 16.3.0
+* React >= 16.8.0 ~> Hooks needed
 
 ## Install
 
@@ -21,10 +21,15 @@ yarn add @react-form-fields/core
 ### How to Create a Form Field
 
 See [HOW_TO_USE.md](https://github.com/react-form-fields/core/blob/master/HOW_TO_USE.md) for details
+See [API.md](https://github.com/react-form-fields/core/blob/master/API.md) to see all configs available
 
 ### Common Masks
 
-#### PT-BR:
+#### en-US:
+
+* money
+
+#### pt-BR:
 
 * zipcode
 * phone

@@ -1,111 +1,131 @@
 # How To Use
 
-### Base (Common props)
+See [API.md](https://github.com/react-form-fields/core/blob/master/API.md) to see all configs available
 
-Component Base to create a form field.
+* [How to Create a Form Field](#how-to-create-a-form-field)
+* [How to a custom validation rules](#how-to-a-custom-validation-rules)
+* [How extends default config](#how-extends-default-config)
+* [How to create or extends a language config](#how-to-create-or-extends-a-language-config)
 
-| Props                    | Required | Type                   | Description                                                            |
-|--------------------------|----------|------------------------|------------------------------------------------------------------------|
-| name                     | false    | string                 |                                                                        |
-| value                    | false    | any                    |                                                                        |
-| submitted                | false    | boolean                | flag to set if form was submited (also can be set by setFormSubmitted) |
-| validation               | false    | string                 | rules of validation                                                    |
-| validationContext        | false    | object { prop: value } | extra fields for validation bind (ex. required_if)                     |
-| validationAttributeNames | false    | object { prop: value } | see: https://github.com/skaterdav85/validatorjs#custom-attribute-names |
-| errorMessage             | false    | string                 | custom error message from external validation                          |
-
-### How to Create a Form Field
+## How to Create a Form Field
 
 ```tsx
-import FieldCoreBase, { IPropsFieldBase, IStateFieldBase } from '@react-form-fields/core/components/FieldCoreBase';
+import useMask from '@react-form-fields/core/hooks/useMask';
+import useValidation from '@react-form-fields/core/hooks/useValidation';
+import { IPropsFieldBase } from '@react-form-fields/core/interfaces/props';
+import React, { useCallback } from 'react';
 
-interface IState extends IStateFieldBase { //<-- extends
-  //your state props
+interface IProps extends IPropsFieldBase { // <~extends your interface props from IPropsFieldBase
+  placeholder: string;
+  value: string;
+  onChange(value: string): void;
 }
 
-interface IProps extends IPropsFieldBase { //<-- extends
-  // your props
-  onChange: (value: string) => void;
-}
+const Field = React.memo((props: IProps) => {
+  const { onChange, placeholder } = props;
 
-class MyComponentField extends FieldCoreBase<IProps, IState> {
-  //[optional] If you need getDerivedStateFromProps dont forget to call super 
-  static getDerivedStateFromProps(props: IProps, currentState: IState): IState {
-    const state = super.getDerivedStateFromProps(props, currentState);
-    // your logic....
-    return state;
-  }
+  const { errorMessage, showError, setDirty } = useValidation(props); // <~ Register your field and get validation
+  const { maskedValue, maskClean } = useMask(props); // <~ (optional) get the mask info, don't worry if no mask was pass, there is a default
+ 
+  const onChangeHandler = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setDirty(true); // <~ remember to check your field as dirty
+    onChange(maskClean(e.currentTarget.value) as string); // <~ (optional) always pass the "clean" value
+  }, [onChange, setDirty, maskClean]);
 
-  onChange = event => {
-    const value = this.mask.clean(event.target ? event.target.value : event);
+  return (
+    <div className='input-container'>
+      <input
+        type='text'
+        placeholder={placeholder}
+        value={maskedValue} // <~ (optional) use the masked value
+        onChange={onChangeHandler}
+      />
 
-    this.setState({ touched: true }); //<-- important to show the error
-    this.props.onChange(value);
-  }
+      {showError && errorMessage && // <~ use showError to know when the error message should be display
+        <p className='error'>{errorMessage}</p>
+      }
+    </div>
+  )
+});
 
-  render() {
-    const { label, name } = this.props;
-
-    return (
-      <Fragment>
-        {/* import: register the field in the validation context */}
-        <ValidationContextRegister field={this} />
-
-        {/* isRequired: check if validation prop contains the required rule */}
-        <label>{label} {this.isRequired ? '*' : ''}</label>
-        <input 
-          name={name}
-          value={this.getMaskedValue}
-          onChange={this.onChange}
-        />
-
-        {/* errorMessage will be null if submitted and touched are false  */}
-        {this.errorMessage ? <p class="error">{this.errorMessage}</p> : null}
-      </Fragment>
-    );
-  }
-}
+export default Field;
 ```
 
-### How extends default config
+## How to a custom validation rules
 
-```ts
-// your config/index.ts
-import * as coreConfig from '@react-form-fields/core/config';
+See [validatorjs](https://github.com/skaterdav85/validatorjs#register-custom-validation-rules)
 
-declare module '@react-form-fields/core/config' {
-  interface IConfig {
-    newProps?: string;
-  }
+## How extends default config
+
+We recommend you to always create these files to avoid imports from **@react-form-fields/core**
+directly, you can copy and paste initially.
+
+Create config/context.tsx
+
+```tsx
+import FieldValidationConfigContextCore, { IConfig as IConfigCore } from '@react-form-fields/core/config';
+import ConfigBuilderClass from './builder';
+
+export interface IConfig extends IConfigCore {
+  myNewBrandConfigProp?: string; // <~ all configs are optional
 }
 
-const defaultConfig: coreConfig.IConfig = {
-  newProps: 'teste'
-};
+export const ConfigBuilder = ConfigBuilderClass;
+export default FieldValidationConfigContext = FieldValidationConfigContextCore;
+```
 
-export function getConfig(): coreConfig.IConfig {
-  return {
-    ...defaultConfig,
-    ...(coreConfig.getConfig() || {})
-  };
-}
+Create config/builder.tsx
 
-export function setConfig(config: coreConfig.IConfig) {
-  coreConfig.setConfig(config);
-}
-
-// your config/builder.ts
-import { IConfig } from '@react-form-fields/core/config';
+```tsx
 import CoreConfigBuilder from '@react-form-fields/core/config/builder';
+import { IConfig } from './context';
 
 export default class ConfigBuilder extends CoreConfigBuilder {
-  public setNewProps(newProps: string) {
+  public setMyNewBrandConfigProp(myNewBrandConfigProp: string) {
     this.config = {
-      ...this.config,
-      newProps: newProps
+      ...this.config, // <~ keeps already set's configs
+      myNewBrandConfigProp
     };
 
-    return this; // <-- always return this
+    return this; // <~ always return this
+  }
+
+  public clean() { // <~you can override the celan method to add you own default values
+    return {
+      ...super.clean(),
+      myNewBrandConfigProp: 'my default value' 
+    }
   }
 }
 ```
+
+## How to create or extends a language config
+
+Create you lang file in langs/your-lang.ts
+
+```ts
+import { IConfig } from '.../config/context';
+import coreLangPTBR from '@react-form-fields/core/lang/pt-br'; // <~ import original lang config
+import * as locale from 'date-fns/locale/pt-BR';
+
+const langPTBR: IConfig = {
+  ...coreLangPTBR,  // <~ extends the original lang config
+  // add your configs
+  myNewBrandConfigProp: 'default value for the lang',
+  masks: [
+    ...coreLangPTBR.masks
+    // your masks
+  ],
+  validations: {
+    lang: 'you-new-lang',
+    customMessages: {
+      ...coreLangPTBR.validations.customMessages
+      // override the default messages
+    }
+  }
+};
+
+export default langPTBR;
+```
+
+## How to 

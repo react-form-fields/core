@@ -21,6 +21,8 @@ const useValidation = ({
   const configContext = React.useContext(FieldValidationConfigContext);
   const fieldContext = React.useContext(FieldValidationContext);
 
+  if (!configContext) throw new Error('You must provide a valid FieldValidationConfigContext');
+
   const [dirty, setDirty] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
 
@@ -53,8 +55,7 @@ const useValidation = ({
     showError: submitted || dirty || !!errorProp,
     dirty,
     setDirty,
-    submitted,
-    setSubmitted
+    submitted
   };
 };
 

@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { ErrorMessages } from 'validatorjs';
 
+import ConfigBuilderClass from './builder';
+
+export const ConfigBuilder = ConfigBuilderClass;
+
 export interface IMask extends IMaskFunction {
   name: string;
 }
@@ -18,5 +22,5 @@ export interface IConfig {
   };
 }
 
-const FieldValidationConfigContext = React.createContext<IConfig>({});
+const FieldValidationConfigContext = React.createContext<IConfig>(null);
 export default FieldValidationConfigContext;

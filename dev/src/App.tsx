@@ -1,21 +1,22 @@
 import './App.css';
 
+import CustomMessage from '@react-form-fields/core/components/CustomMessage';
 import ValidationContext, { IValidationContextRef } from '@react-form-fields/core/components/ValidationContext';
-import ConfigBuilder from '@react-form-fields/core/config/builder';
-import FieldValidationConfigContext from '@react-form-fields/core/config/context';
+import FieldValidationConfigContext, { ConfigBuilder } from '@react-form-fields/core/config/context';
 import langDefault from '@react-form-fields/core/lang/en-us';
 import React, { SyntheticEvent, useCallback, useRef, useState } from 'react';
 
 import Field from './Field';
 import logo from './logo.svg';
 
-const fieldConfig = new ConfigBuilder().fromLang(langDefault).build();
+const fieldConfig = ConfigBuilder.create().fromLang(langDefault).build();
 
 const App: React.FC = () => {
   const validationContextRef = useRef<IValidationContextRef>();
 
   const [value, setValue] = useState('');
   const [valueMoney, setValueMoney] = useState('');
+  const [valueRequired, setValueRequired] = useState('');
   const [showDynamic, setShowDynamic] = useState(false);
   const [valueDynamic, setValueDynamic] = useState('');
   const [formValid, setFormValid] = useState<boolean>();
@@ -41,6 +42,7 @@ const App: React.FC = () => {
 
         <form onSubmit={onSubmitHandler} onReset={onResetHandler}>
           <FieldValidationConfigContext.Provider value={fieldConfig}>
+
             <ValidationContext ref={validationContextRef}>
               <Field
                 placeholder='Type something'
@@ -56,6 +58,15 @@ const App: React.FC = () => {
                 validation='numeric|min:3|max:10'
                 onChange={setValueMoney}
               />
+
+              <Field
+                placeholder='Custom Required Message'
+                value={valueRequired}
+                validation='required'
+                onChange={setValueRequired}
+              >
+                <CustomMessage rules='required'>Required custom message</CustomMessage>
+              </Field>
 
               <label>
                 <input
@@ -77,6 +88,7 @@ const App: React.FC = () => {
 
             </ValidationContext>
           </FieldValidationConfigContext.Provider>
+
           <br />
           <button type='submit'>Send</button>
           <button type='reset'>Reset</button>
@@ -89,6 +101,7 @@ const App: React.FC = () => {
             <p className='error'>Form invalid</p>
           }
         </form>
+
 
       </header>
     </div>

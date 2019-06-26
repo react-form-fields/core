@@ -5,6 +5,7 @@ import { IPropsFieldBase } from '../interfaces/props';
 
 const useMask = ({ mask, value }: IPropsFieldBase) => {
   const configContext = React.useContext(FieldValidationConfigContext);
+  if (!configContext) throw new Error('You must provide a valid FieldValidationConfigContext');
 
   const { apply: maskApply, clean: maskClean } = React.useMemo(() => {
     let maskFunc = (configContext.masks || []).find(m => m.name === mask);

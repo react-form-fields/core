@@ -3,9 +3,13 @@ import Validator, { AttributeFormatter, ErrorMessages, RegisterAsyncCallback, Re
 import { IConfig, IMask } from './context';
 
 export default class ConfigBuilder {
+  static create() {
+    return new ConfigBuilder();
+  }
+
   protected config: IConfig;
 
-  constructor() {
+  private constructor() {
     this.clean();
   }
 
