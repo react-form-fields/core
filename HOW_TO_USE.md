@@ -127,5 +127,3 @@ const langPTBR: IConfig = {
 
 export default langPTBR;
 ```
-
-## How to 

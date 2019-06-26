@@ -20,7 +20,7 @@ yarn add @react-form-fields/core
 
 ### How to Create a Form Field
 
-See [HOW_TO_USE.md](https://github.com/react-form-fields/core/blob/master/HOW_TO_USE.md) for details
+See [HOW_TO_USE.md](https://github.com/react-form-fields/core/blob/master/HOW_TO_USE.md) for details  
 See [API.md](https://github.com/react-form-fields/core/blob/master/API.md) to see all configs available
 
 ### Common Masks
