@@ -1,4 +1,4 @@
-import { IMaskFunction } from '../../../mask';
+import { IMaskFunction } from '../../../config/context';
 
 const cnpj: IMaskFunction = {
   apply: (value: string) => {

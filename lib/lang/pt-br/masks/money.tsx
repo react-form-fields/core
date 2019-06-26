@@ -1,14 +1,14 @@
-import padStart = require('lodash/padStart');
+import padStart from 'lodash/padStart';
 
-import { IMaskFunction } from '../../../mask';
+import { IMaskFunction } from '../../../config/context';
 
 const money: IMaskFunction = {
-  apply: (value: number) => {
-    if (value === null || value === undefined) return '';
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+  apply: (value: number | string) => {
+    if (value === null || value === undefined || value === '') return '';
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value) || 0);
   },
   clean: value => {
-    value = (value || '').replace(/[^\d\,]/gi, '');
+    value = (value || '').toString().replace(/[^\d\,]/gi, '');
 
     if (!value.includes(',')) {
       value = '0,' + padStart(value, 2, '0');

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import 'validatorjs/dist/lang/en';
 
-import { IConfig } from '../../config';
+import { IConfig } from '../../config/context';
 
 const validation: IConfig['validation'] = {
   lang: 'custom-en-us',

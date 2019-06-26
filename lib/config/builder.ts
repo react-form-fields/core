@@ -1,8 +1,6 @@
-import { AttributeFormatter, ErrorMessages, RegisterAsyncCallback, RegisterCallback } from 'validatorjs';
-import Validator = require('validatorjs');
+import Validator, { AttributeFormatter, ErrorMessages, RegisterAsyncCallback, RegisterCallback } from 'validatorjs';
 
-import { IConfig } from '.';
-import { IMask } from '../mask';
+import { IConfig, IMask } from './context';
 
 export default class ConfigBuilder {
   protected config: IConfig;

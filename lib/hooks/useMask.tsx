@@ -1,24 +1,26 @@
-import * as React from 'react';
+import React from 'react';
 
+import FieldValidationConfigContext from '../config/context';
 import { IPropsFieldBase } from '../interfaces/props';
-import { getMask } from '../mask';
 
 const useMask = ({ mask, value }: IPropsFieldBase) => {
-  const { apply, clean } = React.useMemo(() => {
-    let maskFunc = getMask(mask);
+  const configContext = React.useContext(FieldValidationConfigContext);
+
+  const { apply: maskApply, clean: maskClean } = React.useMemo(() => {
+    let maskFunc = (configContext.masks || []).find(m => m.name === mask);
 
     if (!maskFunc) {
-      maskFunc = { apply: (v: string) => v, clean: v => v };
+      maskFunc = { name: 'not-found', apply: (v: string) => v, clean: v => v };
       mask && console.warn(`@react-form-fields/core: Mask '${mask}' not found`);
     }
 
     return maskFunc;
   }, [mask]);
 
-  const maskedValue = React.useMemo(() => apply ? apply(value) : value, [value, apply]);
-  const cleanedValue = React.useMemo(() => clean ? clean(value) : value, [value, clean]);
+  const maskedValue = React.useMemo(() => maskApply ? maskApply(value) : value, [value, maskApply]);
+  const cleanedValue = React.useMemo(() => maskClean ? maskClean(value) : value, [value, maskClean]);
 
-  return { apply, clean, maskedValue, cleanedValue };
+  return { maskApply, maskClean, maskedValue, cleanedValue };
 };
 
 export default useMask;

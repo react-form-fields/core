@@ -1,4 +1,4 @@
-import { IMask } from '../../../mask';
+import { IMask } from '../../../config/context';
 import cnpj from './cnpj';
 import cpf from './cpf';
 import document from './document';

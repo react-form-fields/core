@@ -1,14 +1,14 @@
-import padStart = require('lodash/padStart');
+import padStart from 'lodash/padStart';
 
-import { IMaskFunction } from '../../../mask';
+import { IMaskFunction } from '../../../config/context';
 
 const money: IMaskFunction = {
-  apply: (value: number) => {
-    if (value === null || value === undefined) return '';
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+  apply: (value: number | string) => {
+    if (value === null || value === undefined || value === '') return '';
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(value) || 0);
   },
   clean: value => {
-    value = (value || '').replace(/[^\d\,]/gi, '');
+    value = (value || '').toString().replace(/[^\d\.]/gi, '');
 
     if (!value.includes('.')) {
       value = '0.' + padStart(value, 2, '0');
@@ -19,7 +19,7 @@ const money: IMaskFunction = {
       value = value.replace('.', '').replace(/(\d+)?(\d{2})/gi, '$1.$2').replace(/^\,/gi, '0.');
     }
 
-    return parseFloat(value.replace(/\./gi, ''));
+    return parseFloat(value.replace(/\,/gi, ''));
   }
 };
 

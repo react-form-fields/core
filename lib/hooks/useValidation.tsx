@@ -1,15 +1,25 @@
-import * as React from 'react';
-import * as uuidV4 from 'uuid/v4';
+import React from 'react';
+import uuidV4 from 'uuid/v4';
 import { ErrorMessages } from 'validatorjs';
 
 import CustomMessage from '../components/CustomMessage';
+import FieldValidationConfigContext from '../config/context';
 import { IPropsFieldBase } from '../interfaces/props';
 import { validate } from '../validator';
 import { FieldValidationContext } from '../validator/context';
 
-const useError = ({ name, value, validation, validationContext, validationAttributeNames, errorMessage: errorProp, children }: IPropsFieldBase) => {
+const useValidation = ({
+  name,
+  value,
+  validation,
+  validationContext,
+  validationAttributeNames,
+  errorMessage: errorProp,
+  children
+}: IPropsFieldBase) => {
   const uuid = React.useMemo(() => uuidV4(), []);
-  const context = React.useContext(FieldValidationContext);
+  const configContext = React.useContext(FieldValidationConfigContext);
+  const fieldContext = React.useContext(FieldValidationContext);
 
   const [dirty, setDirty] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
@@ -21,21 +31,21 @@ const useError = ({ name, value, validation, validationContext, validationAttrib
       .reduce<ErrorMessages>((acc, child: any) => {
         child.props.rules.split(',').forEach((rule: string) => acc[rule] = child.props.children);
         return acc;
-      }, {});
-  }, [children]);
+      }, { ...(configContext.validation || { customMessages: {} }).customMessages });
+  }, [children, configContext]);
 
   const errorMessage = errorProp || React.useMemo(() => {
     return validate(name, value, validation, validationContext, validationAttributeNames, customMessages).message;
   }, [name, value, validation, validationContext, validationAttributeNames, customMessages]);
 
   React.useEffect(() => {
-    context.register(uuid, {
+    fieldContext.register(uuid, {
       isValid: !errorMessage,
       onSubmitChange: (submitted) => setSubmitted(submitted),
       onResetRequested: () => { setSubmitted(false); setDirty(false); }
     });
-    return () => context.unregister(uuid);
-  }, [context, errorMessage, setSubmitted, setDirty]);
+    return () => fieldContext.unregister(uuid);
+  }, [fieldContext, errorMessage, setSubmitted, setDirty]);
 
   return {
     isValid: !errorMessage,
@@ -48,4 +58,4 @@ const useError = ({ name, value, validation, validationContext, validationAttrib
   };
 };
 
-export default useError;
+export default useValidation;

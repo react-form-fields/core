@@ -1,4 +1,4 @@
-import { IMaskFunction } from '../../../mask';
+import { IMaskFunction } from '../../../config/context';
 import cnpj from './cnpj';
 import cpf from './cpf';
 

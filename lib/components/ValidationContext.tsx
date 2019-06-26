@@ -1,19 +1,18 @@
-import * as React from 'react';
+import React, { Props } from 'react';
 
 import { FieldValidationContext, IFieldValidationContext, IFieldValidationContextRegister } from '../validator/context';
 
-export interface IProps {
+export interface IProps extends Props<IValidationContextRef> {
   children?: React.ReactNode;
 }
 
-export interface IRef {
+export interface IValidationContextRef {
   isValid(formSubmitted?: boolean): boolean;
   reset(): void;
 }
 
-const ValidationContext = React.memo(React.forwardRef<IRef, IProps>((props, ref) => {
+const ValidationContext = React.memo(React.forwardRef<IValidationContextRef, IProps>((props, ref) => {
   const fields = React.useMemo<{ [key: string]: IFieldValidationContextRegister }>(() => ({}), []);
-
   const context = React.useMemo<IFieldValidationContext>(() => {
     return {
       register: (field, data) => fields[field] = data,

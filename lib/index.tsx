@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // @ts-ignore
-import * as React from 'react';
+import React from 'react';
 
 import CustomMessageComponent from './components/CustomMessage';
 import ValidationContextComponent from './components/ValidationContext';
-import useErrorHook from './hooks/useError';
+import ConfigBuilderCore from './config/builder';
+import FieldValidationConfigContextCore from './config/context';
 import useMaskHook from './hooks/useMask';
-
-export * from './config';
+import useValidationHook from './hooks/useValidation';
 
 export const CustomMessage = CustomMessageComponent;
 export const ValidationContext = ValidationContextComponent;
-export const useError = useErrorHook;
+export const useValidation = useValidationHook;
 export const useMask = useMaskHook;
+export const ConfigBuilder = ConfigBuilderCore;
+export const FieldValidationConfigContext = FieldValidationConfigContextCore;
