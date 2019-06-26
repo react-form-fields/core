@@ -1,0 +1,51 @@
+import * as React from 'react';
+import * as uuidV4 from 'uuid/v4';
+import { ErrorMessages } from 'validatorjs';
+
+import CustomMessage from '../components/CustomMessage';
+import { IPropsFieldBase } from '../interfaces/props';
+import { validate } from '../validator';
+import { FieldValidationContext } from '../validator/context';
+
+const useError = ({ name, value, validation, validationContext, validationAttributeNames, errorMessage: errorProp, children }: IPropsFieldBase) => {
+  const uuid = React.useMemo(() => uuidV4(), []);
+  const context = React.useContext(FieldValidationContext);
+
+  const [dirty, setDirty] = React.useState(false);
+  const [submitted, setSubmitted] = React.useState(false);
+
+  const customMessages = React.useMemo(() => {
+    return React.Children
+      .toArray(children)
+      .filter((child: any) => child.type === CustomMessage)
+      .reduce<ErrorMessages>((acc, child: any) => {
+        child.props.rules.split(',').forEach((rule: string) => acc[rule] = child.props.children);
+        return acc;
+      }, {});
+  }, [children]);
+
+  const errorMessage = errorProp || React.useMemo(() => {
+    return validate(name, value, validation, validationContext, validationAttributeNames, customMessages).message;
+  }, [name, value, validation, validationContext, validationAttributeNames, customMessages]);
+
+  React.useEffect(() => {
+    context.register(uuid, {
+      isValid: !errorMessage,
+      onSubmitChange: (submitted) => setSubmitted(submitted),
+      onResetRequested: () => { setSubmitted(false); setDirty(false); }
+    });
+    return () => context.unregister(uuid);
+  }, [context, errorMessage, setSubmitted, setDirty]);
+
+  return {
+    isValid: !errorMessage,
+    errorMessage,
+    showError: submitted || dirty || !!errorProp,
+    dirty,
+    setDirty,
+    submitted,
+    setSubmitted
+  };
+};
+
+export default useError;

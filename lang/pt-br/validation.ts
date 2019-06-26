@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import 'validatorjs/dist/lang/pt';
 
 import { IConfig } from '../../config';

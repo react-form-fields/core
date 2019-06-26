@@ -26,10 +26,12 @@
     "**/*.ts",
     "**/*.tsx",
     "declarations/**/*.d.ts",
+    "!dev",
   ],
   "exclude": [
     "node_modules",
     "docs",
+    "dev",
     "*.d.ts",
     "components/*.d.ts",
     "decorations/*.d.ts",

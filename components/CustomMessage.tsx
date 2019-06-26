@@ -1,12 +1,13 @@
-import { PureComponent } from 'react';
+import { memo } from 'react';
 
-interface IProps {
+export interface IProps {
   children: string;
   rules: string;
 }
 
-export default class CustomMessage extends PureComponent<IProps> {
-  render(): React.ReactNode {
-    return null;
-  }
-}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const CustomMessage = memo((props: IProps) => {
+  return null;
+});
+
+export default CustomMessage;

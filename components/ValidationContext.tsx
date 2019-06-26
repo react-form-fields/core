@@ -1,45 +1,40 @@
 import * as React from 'react';
 
-import { FieldValidation, IFieldValidationContext } from '../validator/context';
-import FieldCoreBase from './FieldCoreBase';
+import { FieldValidationContext, IFieldValidationContext, IFieldValidationContextRegister } from '../validator/context';
 
-export default class ValidationContext extends React.PureComponent<{}> {
-  public fields: FieldCoreBase<any, any>[] = [];
-  private registerFields: IFieldValidationContext = {
-    getFields: () => {
-      return this.fields;
-    },
-    register: field => {
-      this.fields.push(field);
-    },
-    unregister: field => {
-      const index = this.fields.findIndex(f => f === field);
-      this.fields.splice(index, 1);
-    }
-  };
-
-  public isValid = (formSubmitted: boolean = true): boolean => {
-    this.fields.forEach(f => f.setFormSubmitted(formSubmitted));
-    return this.checkValidation();
-  }
-
-  public reset = (): void => {
-    this.fields.forEach(f => f.resetState());
-  }
-
-  private checkValidation = (): boolean => {
-    if (!this.fields.length) {
-      console.warn('@react-form-fields/core: There is no field registred');
-    }
-
-    return this.fields.every(f => f.isValid());
-  }
-
-  public render(): React.ReactNode {
-    return (
-      <FieldValidation.Provider value={this.registerFields}>
-        {this.props.children}
-      </FieldValidation.Provider>
-    );
-  }
+export interface IProps {
+  children?: React.ReactNode;
 }
+
+export interface IRef {
+  isValid(formSubmitted?: boolean): boolean;
+  reset(): void;
+}
+
+const ValidationContext = React.memo(React.forwardRef<IRef, IProps>((props, ref) => {
+  const fields = React.useMemo<{ [key: string]: IFieldValidationContextRegister }>(() => ({}), []);
+
+  const context = React.useMemo<IFieldValidationContext>(() => {
+    return {
+      register: (field, data) => fields[field] = data,
+      unregister: field => delete fields[field],
+    };
+  }, []);
+
+  React.useImperativeHandle(ref, () => ({
+    isValid: (formSubmitted = true) => {
+      const values = Object.values(fields);
+      values.forEach(v => v.onSubmitChange(formSubmitted));
+      return values.every(f => f.isValid);
+    },
+    reset: () => Object.values(fields).forEach(f => f.onResetRequested())
+  }), []);
+
+  return (
+    <FieldValidationContext.Provider value={context}>
+      {props.children}
+    </FieldValidationContext.Provider>
+  );
+}));
+
+export default ValidationContext;
