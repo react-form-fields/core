@@ -2,14 +2,14 @@ import Validator, { AttributeFormatter, ErrorMessages, RegisterAsyncCallback, Re
 
 import { IConfig, IMask } from './context';
 
-export default class ConfigBuilder {
+export default class ConfigBuilder<T extends IConfig = IConfig> {
   static create() {
     return new ConfigBuilder();
   }
 
-  protected config: IConfig;
+  protected config: T;
 
-  private constructor() {
+  protected constructor() {
     this.clean();
   }
 
@@ -43,7 +43,7 @@ export default class ConfigBuilder {
     return this;
   }
 
-  public fromLang(lang: IConfig) {
+  public fromLang(lang: T) {
     this.config = { ...lang };
     return this;
   }
@@ -53,7 +53,7 @@ export default class ConfigBuilder {
   }
 
   public clean() {
-    this.config = { masks: [], validation: null };
+    this.config = { masks: [], validation: null } as T;
     return this;
   }
 }

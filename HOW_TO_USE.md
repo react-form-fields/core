@@ -63,7 +63,7 @@ directly, you can copy and paste initially.
 Create config/context.tsx
 
 ```tsx
-import FieldValidationConfigContextCore, { IConfig as IConfigCore } from '@react-form-fields/core/config';
+import FieldValidationConfigContextCore, { IConfig as IConfigCore } from '@react-form-fields/core/config/context';
 import ConfigBuilderClass from './builder';
 
 export interface IConfig extends IConfigCore {
@@ -71,7 +71,9 @@ export interface IConfig extends IConfigCore {
 }
 
 export const ConfigBuilder = ConfigBuilderClass;
-export default FieldValidationConfigContext = FieldValidationConfigContextCore;
+
+const FieldValidationConfigContext = FieldValidationConfigContextCore;
+export default FieldValidationConfigContext;
 ```
 
 Create config/builder.tsx
