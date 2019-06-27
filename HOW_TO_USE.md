@@ -63,11 +63,16 @@ directly, you can copy and paste initially.
 Create config/context.tsx
 
 ```tsx
-import FieldValidationConfigContextCore, { IConfig as IConfigCore } from '@react-form-fields/core/config/context';
+import FieldValidationConfigContextCore from '@react-form-fields/core/config/context';
+
 import ConfigBuilderClass from './builder';
 
-export interface IConfig extends IConfigCore {
-  myNewBrandConfigProp?: string; // <~ all configs are optional
+export { IConfig } from '@react-form-fields/core/config/context';
+
+declare module '@react-form-fields/core/config/context' {
+  interface IConfig {
+    myNewBrandConfigProp?: string; // <~ all configs are optional
+  }
 }
 
 export const ConfigBuilder = ConfigBuilderClass;
