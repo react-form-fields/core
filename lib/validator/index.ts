@@ -1,6 +1,7 @@
 import { ErrorMessages, ValidatorStatic } from 'validatorjs';
 
 const validator: ValidatorStatic = require('validatorjs');
+validator.setMessages('en', require('validatorjs/src/lang/en'));
 
 export function validate(
   fieldName: string,
