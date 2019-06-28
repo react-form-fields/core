@@ -1,3 +1,6 @@
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
+
 import padStart = require('lodash/padStart');
 
 import { IMaskFunction } from '../../../config/context';
