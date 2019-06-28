@@ -1,4 +1,6 @@
-import * as validator from 'validatorjs';
+import { ErrorMessages, ValidatorStatic } from 'validatorjs';
+
+const validator: ValidatorStatic = require('validatorjs');
 
 export function validate(
   fieldName: string,
@@ -6,7 +8,7 @@ export function validate(
   rules: string,
   context: any = {},
   attributeNames: any = {},
-  customMessages: validator.ErrorMessages = null)
+  customMessages: ErrorMessages = null)
   : { valid: boolean, message?: string } {
   if (!rules) return { valid: true };
 
@@ -29,6 +31,6 @@ export function useLang(lang: string) {
   validator.useLang(lang);
 }
 
-export function addLang(lang: string, messages: validator.ErrorMessages) {
+export function addLang(lang: string, messages: ErrorMessages) {
   validator.setMessages(lang, messages);
 }

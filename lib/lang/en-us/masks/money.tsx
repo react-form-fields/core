@@ -1,4 +1,4 @@
-import padStart from 'lodash/padStart';
+import padStart = require('lodash/padStart');
 
 import { IMaskFunction } from '../../../config/context';
 

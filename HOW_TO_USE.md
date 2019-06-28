@@ -98,10 +98,12 @@ export default class ConfigBuilder extends CoreConfigBuilder {
   }
 
   public clean() { // <~you can override the celan method to add you own default values
-    return {
+    this.config = {
       ...super.clean(),
       myNewBrandConfigProp: 'my default value' 
     }
+
+    return this;
   }
 }
 ```

@@ -1,5 +1,5 @@
-import React from 'react';
-import uuidV4 from 'uuid/v4';
+import * as React from 'react';
+import * as uuidV4 from 'uuid/v4';
 import { ErrorMessages } from 'validatorjs';
 
 import CustomMessage from '../components/CustomMessage';

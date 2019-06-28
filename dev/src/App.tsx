@@ -9,7 +9,7 @@ import React, { SyntheticEvent, useCallback, useRef, useState } from 'react';
 import Field from './Field';
 import logo from './logo.svg';
 
-const fieldConfig = ConfigBuilder.create().fromLang(langDefault).build();
+const fieldConfig = new ConfigBuilder().fromLang(langDefault).build();
 
 const App: React.FC = () => {
   const validationContextRef = useRef<IValidationContextRef>();

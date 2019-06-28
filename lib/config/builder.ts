@@ -1,15 +1,13 @@
-import Validator, { AttributeFormatter, ErrorMessages, RegisterAsyncCallback, RegisterCallback } from 'validatorjs';
+import { AttributeFormatter, ErrorMessages, RegisterAsyncCallback, RegisterCallback, ValidatorStatic } from 'validatorjs';
 
 import { IConfig, IMask } from './context';
 
-export default class ConfigBuilder<T extends IConfig = IConfig> {
-  static create() {
-    return new ConfigBuilder();
-  }
+const validator: ValidatorStatic = require('validatorjs');
 
-  protected config: T;
+export default class ConfigBuilder {
+  protected config: IConfig;
 
-  protected constructor() {
+  public constructor() {
     this.clean();
   }
 
@@ -24,17 +22,17 @@ export default class ConfigBuilder<T extends IConfig = IConfig> {
   }
 
   public addValidator(name: string, callback: RegisterCallback, errorMessage: string) {
-    Validator.register(name, callback, errorMessage);
+    validator.register(name, callback, errorMessage);
     return this;
   }
 
   public addValidatorAsync(name: string, callback: RegisterAsyncCallback, errorMessage: string) {
-    Validator.registerAsync(name, callback, errorMessage);
+    validator.registerAsync(name, callback, errorMessage);
     return this;
   }
 
   public setValidatorAttributeFormatter(func: AttributeFormatter) {
-    Validator.setAttributeFormatter(func);
+    validator.setAttributeFormatter(func);
     return this;
   }
 
@@ -43,7 +41,7 @@ export default class ConfigBuilder<T extends IConfig = IConfig> {
     return this;
   }
 
-  public fromLang(lang: T) {
+  public fromLang(lang: IConfig) {
     this.config = { ...lang };
     return this;
   }
@@ -53,7 +51,7 @@ export default class ConfigBuilder<T extends IConfig = IConfig> {
   }
 
   public clean() {
-    this.config = { masks: [], validation: null } as T;
+    this.config = { masks: [], validation: null };
     return this;
   }
 }

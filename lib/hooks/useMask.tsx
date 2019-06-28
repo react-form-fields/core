@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import FieldValidationConfigContext from '../config/context';
 import { IPropsFieldBase } from '../interfaces/props';
