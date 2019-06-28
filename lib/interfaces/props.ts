@@ -5,7 +5,6 @@ export interface IPropsFieldBase {
   validationContext?: Object;
   validationAttributeNames?: Object;
   errorMessage?: string;
-  submitted?: boolean;
   mask?: string;
   children?: React.ReactNode;
 }
@@ -19,6 +18,6 @@ export interface IPropsFieldBase {
  * }
  */
 /* eslint-enable no-trailing-spaces */
-export type PropsResolver<T, U = ''> =
-  { [K in Exclude<keyof T, keyof IPropsFieldBase | U>]?: T[K]; } &
-  { [K in keyof IPropsFieldBase]: IPropsFieldBase[K]; };
+export type PropsResolver<T, U extends string = ''> =
+  Omit<T, keyof IPropsFieldBase | U> &
+  Omit<IPropsFieldBase, U>;
