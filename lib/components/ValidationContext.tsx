@@ -3,7 +3,6 @@ import * as React from 'react';
 import { FieldValidationContext, IFieldValidationContext, IFieldValidationContextRegister } from '../validator/context';
 
 export interface IProps extends React.Props<IValidationContextRef> {
-  children?: React.ReactNode;
 }
 
 export interface IValidationContextRef {
