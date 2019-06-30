@@ -19,6 +19,6 @@ export interface IPropsFieldBase<Ref = {}> extends Props<Ref> {
  * }
  */
 /* eslint-enable no-trailing-spaces */
-export type PropsResolver<T, U extends string = ''> =
-  Omit<T, keyof IPropsFieldBase | U> &
-  Omit<IPropsFieldBase, U>;
+export type PropsResolver<T, U extends string = '', Ref = {}> =
+  Omit<T, keyof IPropsFieldBase<Ref> | U> &
+  Omit<IPropsFieldBase<Ref>, U>;
