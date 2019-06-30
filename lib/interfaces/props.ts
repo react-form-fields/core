@@ -1,4 +1,6 @@
-export interface IPropsFieldBase {
+import { Props } from 'react';
+
+export interface IPropsFieldBase<Ref = {}> extends Props<Ref> {
   name?: string;
   value?: any;
   validation?: string;
@@ -6,7 +8,6 @@ export interface IPropsFieldBase {
   validationAttributeNames?: Object;
   errorMessage?: string;
   mask?: string;
-  children?: React.ReactNode;
 }
 
 /* eslint-disable no-trailing-spaces */
