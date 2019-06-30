@@ -25,6 +25,8 @@ export default function useMemoOtherProps<T extends IPropsFieldBase>(props: T, .
     'submitted',
     'mask',
     'children',
+    'ref',
+    'key',
     ...(ownProps || [])
   ];
 
