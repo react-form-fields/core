@@ -41,12 +41,12 @@ const useValidation = ({
   }, [name, value, validation, validationContext, validationAttributeNames, customMessages]);
 
   React.useEffect(() => {
-    fieldContext.register(uuid, {
+    fieldContext && fieldContext.register(uuid, {
       isValid: !errorMessage,
       onSubmitChange: (submitted) => setSubmitted(submitted),
       onResetRequested: () => { setSubmitted(false); setDirty(false); }
     });
-    return () => fieldContext.unregister(uuid);
+    return () => fieldContext && fieldContext.unregister(uuid);
   }, [fieldContext, errorMessage, setSubmitted, setDirty]);
 
   return {
