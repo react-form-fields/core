@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { FieldValidationContext, IFieldValidationContext, IFieldValidationContextRegister } from '../validator/context';
-import { IConfig } from './ConfigProvider';
+import ConfigProvider, { IConfig } from './ConfigProvider';
 
 export interface IProps extends React.Props<IValidationContextRef> {
   config?: IConfig;
@@ -31,9 +31,11 @@ const ValidationContext = React.memo(React.forwardRef<IValidationContextRef, IPr
   }), []);
 
   return (
-    <FieldValidationContext.Provider value={context}>
-      {props.children}
-    </FieldValidationContext.Provider>
+    <ConfigProvider value={props.config}>
+      <FieldValidationContext.Provider value={context}>
+        {props.children}
+      </FieldValidationContext.Provider>
+    </ConfigProvider>
   );
 }));
 

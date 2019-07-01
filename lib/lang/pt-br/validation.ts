@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import 'validatorjs/dist/lang/pt';
 
-import { IConfig } from '../../config/context';
+import { IConfig } from '../../components/ConfigProvider';
 
 const validation: IConfig['validation'] = {
   lang: 'custom-pt-br',

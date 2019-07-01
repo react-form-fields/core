@@ -1,4 +1,4 @@
-import { IMask } from '../../../config/context';
+import { IMask } from '../../../components/ConfigProvider/context';
 import money from './money';
 
 const masks: IMask[] = [

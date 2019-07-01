@@ -3,7 +3,7 @@ import 'intl/locale-data/jsonp/en-US';
 
 import padStart = require('lodash/padStart');
 
-import { IMaskFunction } from '../../../config/context';
+import { IMaskFunction } from '../../../components/ConfigProvider/context';
 
 const money: IMaskFunction = {
   apply: (value: number | string) => {

@@ -11,8 +11,13 @@ export interface IConfigProviderProps extends React.Props<{}> {
 }
 
 const ConfigProvider = React.memo<IConfigProviderProps>((props) => {
+  const currentConfig = React.useContext(FieldValidationConfigContext);
+  const config = React.useMemo(() => ({
+    ...(currentConfig || {}), ...(props.value || {})
+  }), [currentConfig, props.value]);
+
   return (
-    <FieldValidationConfigContext.Provider value={props.value}>
+    <FieldValidationConfigContext.Provider value={config}>
       {props.children}
     </FieldValidationConfigContext.Provider>
   );
