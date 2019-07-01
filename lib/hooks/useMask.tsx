@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import FieldValidationConfigContext from '../components/ConfigProvider/context';
+import FieldValidationConfigContext from '../ConfigProvider/context';
 import { IPropsFieldBase } from '../interfaces/props';
 
 const useMask = ({ mask, value }: IPropsFieldBase) => {

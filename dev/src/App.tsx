@@ -1,9 +1,9 @@
 import './App.css';
 
-import ConfigProvider, { ConfigBuilder } from '@react-form-fields/core/components/ConfigProvider';
-import CustomMessage from '@react-form-fields/core/components/CustomMessage';
-import ValidationContext, { IValidationContextRef } from '@react-form-fields/core/components/ValidationContext';
+import ConfigProvider, { ConfigBuilder } from '@react-form-fields/core/ConfigProvider';
+import CustomMessage from '@react-form-fields/core/CustomMessage';
 import langDefault from '@react-form-fields/core/lang/en-us';
+import ValidationContext, { IValidationContextRef } from '@react-form-fields/core/ValidationContext';
 import React, { SyntheticEvent, useCallback, useRef, useState } from 'react';
 
 import Field from './Field';

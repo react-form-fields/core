@@ -1,8 +1,8 @@
-import ConfigProviderComponent, { ConfigBuilder as ConfigBuilderClass } from './components/ConfigProvider';
-import CustomMessageComponent from './components/CustomMessage';
-import ValidationContextComponent from './components/ValidationContext';
+import ConfigProviderComponent, { ConfigBuilder as ConfigBuilderClass } from './ConfigProvider';
+import CustomMessageComponent from './CustomMessage';
 import useMaskHook from './hooks/useMask';
 import useValidationHook from './hooks/useValidation';
+import ValidationContextComponent from './ValidationContext';
 
 export const CustomMessage = CustomMessageComponent;
 export const ValidationContext = ValidationContextComponent;
