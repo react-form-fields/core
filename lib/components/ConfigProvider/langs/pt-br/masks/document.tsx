@@ -1,4 +1,4 @@
-import { IMaskFunction } from '../../../components/ConfigProvider/context';
+import { IMaskFunction } from '../../../context';
 import cnpj from './cnpj';
 import cpf from './cpf';
 

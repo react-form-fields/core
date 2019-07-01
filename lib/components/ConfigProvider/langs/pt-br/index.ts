@@ -1,4 +1,4 @@
-import { IConfig } from '../../components/ConfigProvider';
+import { IConfig } from '../../context';
 import masks from './masks';
 import validation from './validation';
 

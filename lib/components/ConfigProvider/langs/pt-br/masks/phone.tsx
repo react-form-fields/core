@@ -1,4 +1,4 @@
-import { IMaskFunction } from '../../../components/ConfigProvider/context';
+import { IMaskFunction } from '../../../context';
 
 const phone: IMaskFunction = {
   apply: (value: string) => {
