@@ -1,8 +1,8 @@
 import './App.css';
 
+import ConfigProvider, { ConfigBuilder } from '@react-form-fields/core/components/ConfigProvider';
 import CustomMessage from '@react-form-fields/core/components/CustomMessage';
 import ValidationContext, { IValidationContextRef } from '@react-form-fields/core/components/ValidationContext';
-import FieldValidationConfigContext, { ConfigBuilder } from '@react-form-fields/core/config/context';
 import langDefault from '@react-form-fields/core/lang/en-us';
 import React, { SyntheticEvent, useCallback, useRef, useState } from 'react';
 
@@ -41,7 +41,7 @@ const App: React.FC = () => {
         <img src={logo} className="App-logo" alt="logo" />
 
         <form onSubmit={onSubmitHandler} onReset={onResetHandler}>
-          <FieldValidationConfigContext.Provider value={fieldConfig}>
+          <ConfigProvider value={fieldConfig}>
 
             <ValidationContext ref={validationContextRef}>
               <Field
@@ -87,7 +87,7 @@ const App: React.FC = () => {
               }
 
             </ValidationContext>
-          </FieldValidationConfigContext.Provider>
+          </ConfigProvider>
 
           <br />
           <button type='submit'>Send</button>

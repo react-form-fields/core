@@ -2,8 +2,8 @@ import * as React from 'react';
 import * as uuidV4 from 'uuid/v4';
 import { ErrorMessages } from 'validatorjs';
 
+import FieldValidationConfigContext from '../components/ConfigProvider/context';
 import CustomMessage from '../components/CustomMessage';
-import FieldValidationConfigContext from '../config/context';
 import { IPropsFieldBase } from '../interfaces/props';
 import { validate } from '../validator';
 import { FieldValidationContext } from '../validator/context';

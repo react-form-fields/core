@@ -1,8 +1,10 @@
 import * as React from 'react';
 
 import { FieldValidationContext, IFieldValidationContext, IFieldValidationContextRegister } from '../validator/context';
+import { IConfig } from './ConfigProvider';
 
 export interface IProps extends React.Props<IValidationContextRef> {
+  config?: IConfig;
 }
 
 export interface IValidationContextRef {
