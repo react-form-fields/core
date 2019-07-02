@@ -17,7 +17,7 @@ const useValidation = ({
   errorMessage: errorProp,
   children
 }: IPropsFieldBase) => {
-  const uuid = React.useMemo(() => uuidV4(), []);
+  const [uuid] = React.useState(uuidV4());
   const configContext = React.useContext(FieldValidationConfigContext);
   const fieldContext = React.useContext(FieldValidationContext);
 
@@ -36,9 +36,9 @@ const useValidation = ({
       }, { ...(configContext.validation || { customMessages: {} }).customMessages });
   }, [children, configContext]);
 
-  const errorMessage = errorProp || React.useMemo(() => {
-    return validate(name, value, validation, validationContext, validationAttributeNames, customMessages).message;
-  }, [name, value, validation, validationContext, validationAttributeNames, customMessages]);
+  const errorMessage = React.useMemo(() => {
+    return errorProp || validate(name, value, validation, validationContext, validationAttributeNames, customMessages).message;
+  }, [name, value, validation, validationContext, validationAttributeNames, customMessages, errorProp]);
 
   React.useEffect(() => {
     fieldContext && fieldContext.register(uuid, {
