@@ -18,13 +18,15 @@ const useValidation = ({
   children
 }: IPropsFieldBase) => {
   const [uuid] = React.useState(uuidV4());
-  const configContext = React.useContext(FieldValidationConfigContext);
+  const config = React.useContext(FieldValidationConfigContext);
   const fieldContext = React.useContext(FieldValidationContext);
 
-  if (!configContext) throw new Error('You must provide a valid FieldValidationConfigContext');
+  if (!config) throw new Error('You must provide a valid FieldValidationConfigContext');
 
   const [dirty, setDirty] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [isValid, setIsValid] = React.useState(Promise.resolve(true));
 
   const customMessages = React.useMemo(() => {
     return React.Children
@@ -33,16 +35,31 @@ const useValidation = ({
       .reduce<ErrorMessages>((acc, child: any) => {
         child.props.rules.split(',').forEach((rule: string) => acc[rule] = child.props.children);
         return acc;
-      }, { ...(configContext.validation || { customMessages: {} }).customMessages });
-  }, [children, configContext]);
+      }, { ...(config.validation || { customMessages: {} }).customMessages });
+  }, [children, config]);
 
-  const errorMessage = React.useMemo(() => {
-    return errorProp || validate(name, value, validation, validationContext, validationAttributeNames, customMessages).message;
-  }, [name, value, validation, validationContext, validationAttributeNames, customMessages, errorProp]);
+  React.useEffect(() => {
+    if (errorProp) {
+      setIsValid(Promise.resolve(false));
+      setErrorMessage(errorProp);
+      return () => { };
+    }
+
+    let isValidPromise: (isValid: boolean) => void;
+    setIsValid(new Promise(r => isValidPromise = r));
+
+    const timeout = setTimeout(() => {
+      const errorMessage = validate(name, value, validation, validationContext, validationAttributeNames, customMessages).message;
+      isValidPromise(!errorMessage);
+      setErrorMessage(errorMessage);
+    }, config.validationDelay === undefined ? 500 : config.validationDelay);
+
+    return () => clearTimeout(timeout);
+  }, [name, value, validation, validationContext, validationAttributeNames, customMessages, errorProp, setIsValid]);
 
   React.useEffect(() => {
     fieldContext && fieldContext.register(uuid, {
-      isValid: !errorMessage,
+      isValid,
       onSubmitChange: (submitted) => setSubmitted(submitted),
       onResetRequested: () => { setSubmitted(false); setDirty(false); }
     });

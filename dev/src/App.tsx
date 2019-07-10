@@ -1,8 +1,8 @@
 import './App.css';
 
 import ConfigProvider, { ConfigBuilder } from '@react-form-fields/core/ConfigProvider';
+import langDefault from '@react-form-fields/core/ConfigProvider/langs/en-us';
 import CustomMessage from '@react-form-fields/core/CustomMessage';
-import langDefault from '@react-form-fields/core/lang/en-us';
 import ValidationContext, { IValidationContextRef } from '@react-form-fields/core/ValidationContext';
 import React, { SyntheticEvent, useCallback, useRef, useState } from 'react';
 
@@ -23,7 +23,9 @@ const App: React.FC = () => {
 
   const onSubmitHandler = useCallback((e: SyntheticEvent) => {
     e.preventDefault();
-    setFormValid(validationContextRef.current.isValid())
+    validationContextRef.current.isValid().then(isValid => {
+      setFormValid(isValid);
+    });
   }, [validationContextRef]);
 
   const onResetHandler = useCallback((e: SyntheticEvent) => {
@@ -45,6 +47,7 @@ const App: React.FC = () => {
 
             <ValidationContext ref={validationContextRef}>
               <Field
+                name='text'
                 placeholder='Type something'
                 value={value}
                 validation='required|string|min:3|max:10'

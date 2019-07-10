@@ -15,6 +15,7 @@ export interface IMaskFunction {
 }
 
 export interface IConfig {
+  validationDelay?: number;
   masks?: IMask[];
   validation?: {
     lang: string;

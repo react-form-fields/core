@@ -8,7 +8,7 @@ export interface IProps extends React.Props<IValidationContextRef> {
 }
 
 export interface IValidationContextRef {
-  isValid(formSubmitted?: boolean): boolean;
+  isValid(formSubmitted?: boolean): Promise<boolean>;
   reset(): void;
 }
 
@@ -22,10 +22,12 @@ const ValidationContext = React.memo(React.forwardRef<IValidationContextRef, IPr
   }, []);
 
   React.useImperativeHandle(ref, () => ({
-    isValid: (formSubmitted = true) => {
+    isValid: async (formSubmitted = true) => {
       const values = Object.values(fields);
       values.forEach(v => v.onSubmitChange(formSubmitted));
-      return values.every(f => f.isValid);
+
+      const statuses = await Promise.all(values.map(f => f.isValid));
+      return statuses.every(isValid => isValid);
     },
     reset: () => Object.values(fields).forEach(f => f.onResetRequested())
   }), []);

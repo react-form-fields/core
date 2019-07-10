@@ -6,7 +6,7 @@ export interface IFieldValidationContext {
 }
 
 export interface IFieldValidationContextRegister {
-  isValid: boolean;
+  isValid: Promise<boolean>;
   onSubmitChange: (submitted: boolean) => void;
   onResetRequested: () => void;
 }

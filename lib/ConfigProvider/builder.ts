@@ -37,8 +37,12 @@ export default class ConfigBuilder {
   }
 
   public addCustomMessages(lang: string, customMessages: ErrorMessages) {
-    this.config.validation = { lang, customMessages };
+    this.config.validation = { ...(this.config.validation || {}), lang, customMessages };
     return this;
+  }
+
+  public setValidationDelay(validationDelay: number) {
+    this.config = { ...this.config, validationDelay };
   }
 
   public fromLang(lang: IConfig) {
@@ -51,7 +55,7 @@ export default class ConfigBuilder {
   }
 
   public clean() {
-    this.config = { masks: [], validation: null };
+    this.config = { validationDelay: 500, masks: [], validation: null };
     return this;
   }
 }
