@@ -1,12 +1,12 @@
 import cloneDeep = require('lodash/cloneDeep');
 import { useCallback, useRef, useState } from 'react';
 
-export type Model<T> = {
+type IModel<T> = {
   [key in keyof T]?: T[key];
-} & { $dirty?: boolean; toJSON?(this: Model<T>): T };
+} & { $dirty?: boolean; toJSON?(this: IModel<T>): T };
 
 const useModel = <T>(initialState?: Partial<T>) => {
-  const cloneModel = useCallback((model: Model<T>, $dirty: boolean) => {
+  const cloneModel = useCallback((model: IModel<T>, $dirty: boolean) => {
     model = cloneDeep(model);
     model.$dirty = $dirty;
 
@@ -19,15 +19,16 @@ const useModel = <T>(initialState?: Partial<T>) => {
     return model;
   }, []);
 
-  const freezeInitalState = useRef<Model<T>>(cloneModel(initialState, false)).current;
-  const [model, setModel] = useState<Model<T>>(freezeInitalState);
+  const [freezeInitalState] = useState(cloneModel(initialState, false));
+  const [model, setModel] = useState(cloneModel(initialState, false));
   const handlers = useRef<{ [key: string]: any }>({}).current;
 
-  const setModelPropCallback = useRef((key: string, handler: (model: Partial<T>, value: any) => void) => {
+  const setModelCallback = useRef((key: string, handler: (model: Partial<T>, value: any) => void) => {
     if (!handlers[key]) {
       handlers[key] = (value: any) => {
-        handler(model, value);
-        setModel(cloneModel(model, true));
+        const newModel = cloneModel(model, true);
+        handler(newModel, value);
+        setModel(newModel);
       };
     }
 
@@ -38,9 +39,9 @@ const useModel = <T>(initialState?: Partial<T>) => {
     setModel(cloneModel(freezeInitalState, false));
   }, [cloneModel, freezeInitalState]);
 
-  return [model, setModelPropCallback, setModel, cleanModel] as [
+  return [model, setModelCallback, setModel, cleanModel] as [
     typeof model,
-    typeof setModelPropCallback,
+    typeof setModelCallback,
     typeof setModel,
     typeof cleanModel
   ];
