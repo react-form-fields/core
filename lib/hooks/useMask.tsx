@@ -1,9 +1,13 @@
 import * as React from 'react';
 
 import FieldValidationConfigContext from '../ConfigProvider/context';
-import { IPropsFieldBase } from '../interfaces/props';
 
-const useMask = ({ mask, value }: IPropsFieldBase) => {
+export interface IUseMaskParams {
+  value?: any;
+  mask?: string;
+}
+
+const useMask = ({ mask, value }: IUseMaskParams) => {
   const configContext = React.useContext(FieldValidationConfigContext);
   if (!configContext) throw new Error('You must provide a valid FieldValidationConfigContext');
 
