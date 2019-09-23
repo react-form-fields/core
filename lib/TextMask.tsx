@@ -3,7 +3,7 @@ import { memo } from 'react';
 import useMask from './hooks/useMask';
 
 export interface ITextMaskProps {
-  children: string;
+  children: string | number | Date;
   mask: string;
 }
 
