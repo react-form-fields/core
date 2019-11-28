@@ -13,7 +13,7 @@ const cpf: IMaskFunction = {
       .replace(/[-.\\]$/, '')
       .replace(/[-.\\]$/, '');
   },
-  clean: (value: string) => value.replace(/\D/gi, '').substr(0, 11)
+  clean: (value: string) => (value || '').replace(/\D/gi, '').substr(0, 11)
 };
 
 export default cpf;

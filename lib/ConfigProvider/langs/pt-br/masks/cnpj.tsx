@@ -13,7 +13,7 @@ const cnpj: IMaskFunction = {
       .replace(/[-.\\]$/, '')
       .replace(/[-.\\]$/, '');
   },
-  clean: (value: string) => value.replace(/\D/gi, '').substr(0, 14)
+  clean: (value: string) => (value || '').replace(/\D/gi, '').substr(0, 14)
 };
 
 export default cnpj;

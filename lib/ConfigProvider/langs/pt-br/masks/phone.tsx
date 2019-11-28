@@ -13,7 +13,7 @@ const phone: IMaskFunction = {
 
     return value.replace(regexp, result).replace(/-$/, '');
   },
-  clean: (value: string) => value.replace(/\D/gi, '').substr(0, 11)
+  clean: (value: string) => (value || '').replace(/\D/gi, '').substr(0, 11)
 };
 
 export default phone;
